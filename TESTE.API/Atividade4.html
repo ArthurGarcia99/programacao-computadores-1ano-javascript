@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Exemplo de Consumo de API</title>
+</head>
+<body>
+  <h1>Informações Filme</h1>
+  <div class="controle">
+    <input type="text" id="name">
+    <button onclick="carregarinformacoes()">Carregar Informações</button>
+  </div>
+  <div id="galeria"></div>
+
+  <script>
+    async function carregarinformacoes() {
+      const name = document.getElementById('name').value
+      const url = `http://www.omdbapi.com/?t=${name}&apikey=3df5c4dd`;
+      const galeria = document.getElementById('galeria');
+
+      galeria.innerHTML = "<p>Carregando Informações...</p>";
+
+      try {
+        const resposta = await fetch(url);
+        const informacoes = await resposta.json();
+
+        galeria.innerHTML = `<div>
+            <p>---------------------</p>
+            <img src="${informacoes.Poster}" alt="${informacoes.Title}" width="200"><br>
+            <p><strong>Título:</strong> ${informacoes.Title}</p>
+            <p><strong>Ano:</strong> ${informacoes.Year}</p>
+            <p><strong>Lançamento:</strong> ${informacoes.Released}</p>
+            <p><strong>Gênero:</strong> ${informacoes.Genre}</p>
+            <p><strong>Diretor:</strong> ${informacoes.Director}</p>
+          </div>`
+
+      } catch (erro) {
+        console.error("Erro ao carregar o filme:", erro);
+        alert("Não foi possível carregar os dados da API.");
+      }
+    }
+  </script>
+</body>
+</html>
